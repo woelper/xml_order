@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+
+<!-- planes.xml - A document that lists ads for 
+                  used airplanes -->
+
+<!DOCTYPE planes_for_sale SYSTEM "planes.dtd">
+<planes_for_sale>
+    <ad>
+        <product u="1345" a="1345"/>
+        <scale x="1" z="2" y="2"></scale>
+        <translation x="1" z="2" y="2"></translation>
+        <year> 1977 </year>
+        <location>
+            <city> Rapid City, </city>
+            <state> South Dakota </state>
+        </location>
+    </ad>
+</planes_for_sale>
