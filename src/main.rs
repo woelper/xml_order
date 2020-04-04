@@ -1,13 +1,39 @@
+use std::path::Path;
+use std::io::prelude::*;
+use std::fs::File;
+use std::io::Cursor;
 use quick_xml::Writer;
 use quick_xml::Reader;
 use quick_xml::events::{Event, BytesEnd, BytesStart};
 use quick_xml::events::attributes::Attribute;
-use std::io::Cursor;
-use std::fs::File;
-use std::io::prelude::*;
+use clap::{App, Arg};
 
 fn main() {
-    let mut reader = Reader::from_file("test.xml").unwrap();
+
+
+    let matches = App::new("xmlorder")
+        .arg(
+            Arg::with_name("input")
+                .help("XML file to sort")
+                .required(true)
+        )
+        .get_matches();
+
+    let input_file = Path::new(matches.value_of("input").unwrap_or("You need an XML file"));
+    
+    if let Some(ext) = input_file.extension() {
+        if ext.to_string_lossy().to_lowercase() != "xml" {
+            println!("This is not an xml file. Exiting. I am so sorry.");
+            return
+        }
+    }
+
+    if !input_file.is_file() {
+        println!("This file does not exist. I have nothing left to do. Have nice day.");
+        return
+    }
+
+    let mut reader = Reader::from_file(input_file).unwrap();
     reader.trim_text(true);
     let mut writer = Writer::new_with_indent(Cursor::new(Vec::new()), b' ', 4);
     let mut buf = Vec::new();
@@ -60,7 +86,7 @@ fn main() {
 
     let result = writer.into_inner().into_inner();
 
-    let mut file = File::create("result.xml").unwrap();
+    let mut file = File::create(input_file).unwrap();
     file.write_all(&result).unwrap();
 
 }
